@@ -158,7 +158,11 @@ class FDM:
         res = dict(zip(names, heights))
         return res
 
-    def plot_method(self, axis, X, Y, mat, title='', xlabel='Time', ylabel='L', zlabel='T', fontsize=12):
+    def plot_method(self, axis, mat, title='', xlabel='Time', ylabel='L', zlabel='T', fontsize=12):
+        X = np.linspace(0, self.T, self.maxk)
+        Y = np.linspace(0, self.L, self.n + 1)
+        X, Y = np.meshgrid(X, Y)
+
         axis.plot_surface(X, Y, mat, cmap='viridis', edgecolor='none')
         axis.set_title(title)
         axis.set_xlabel(xlabel, fontsize=fontsize)
@@ -166,41 +170,29 @@ class FDM:
         axis.set_zlabel(zlabel, fontsize=fontsize)
 
     def plot_solution(self):
-        X = np.linspace(0, self.T, self.maxk)
-        Y = np.linspace(0, self.L, self.n + 1)
-        X, Y = np.meshgrid(X, Y)
-
         figure, axis = plt.subplots(subplot_kw={'projection': '3d'}, figsize=(6, 6))
-        self.plot_method(axis, X, Y, self.sol_mat, 'Аналитическое решение')
+        self.plot_method(axis, self.sol_mat, 'Аналитическое решение')
 
     def plot_fdm_solutions(self):
-        X = np.linspace(0, self.T, self.maxk)
-        Y = np.linspace(0, self.L, self.n + 1)
-        X, Y = np.meshgrid(X, Y)
-
         figure, axis = plt.subplots(2, 2, subplot_kw={'projection': '3d'}, figsize=(8, 8))
         plt.subplots_adjust(hspace=0.2)
 
-        self.plot_method(axis[0, 0], X, Y, self.expl_euler(), title='Explicit Euler')
-        self.plot_method(axis[0, 1], X, Y, self.impl_euler(), title='Implicit Euler')
-        self.plot_method(axis[1, 0], X, Y, self.trapz_euler(), title='Trapezoidal Euler')
-        self.plot_method(axis[1, 1], X, Y, self.rk4(), title='4-th order Runge-Kutta')
+        self.plot_method(axis[0, 0], self.expl_euler(), title='Explicit Euler')
+        self.plot_method(axis[0, 1], self.impl_euler(), title='Implicit Euler')
+        self.plot_method(axis[1, 0], self.trapz_euler(), title='Trapezoidal Euler')
+        self.plot_method(axis[1, 1], self.rk4(), title='4-th order Runge-Kutta')
 
         plt.suptitle('Решения уравнения численными методами', fontsize=16)
         plt.show()
 
     def plot_diff(self):
-        X = np.linspace(0, self.T, self.maxk)
-        Y = np.linspace(0, self.L, self.n + 1)
-        X, Y = np.meshgrid(X, Y)
-
         figure, axis = plt.subplots(2, 2, subplot_kw={'projection': '3d'}, figsize=(8, 8))
         plt.subplots_adjust(hspace=0.2)
 
-        self.plot_method(axis[0, 0], X, Y, self.sol_diff(self.expl_euler()), title='Explicit Euler')
-        self.plot_method(axis[0, 1], X, Y, self.sol_diff(self.impl_euler()), title='Implicit Euler')
-        self.plot_method(axis[1, 0], X, Y, self.sol_diff(self.trapz_euler()), title='Trapezoidal Euler')
-        self.plot_method(axis[1, 1], X, Y, self.sol_diff(self.rk4()), title='4-th order Runge-Kutta')
+        self.plot_method(axis[0, 0], self.sol_diff(self.expl_euler()), title='Explicit Euler')
+        self.plot_method(axis[0, 1], self.sol_diff(self.impl_euler()), title='Implicit Euler')
+        self.plot_method(axis[1, 0], self.sol_diff(self.trapz_euler()), title='Trapezoidal Euler')
+        self.plot_method(axis[1, 1], self.sol_diff(self.rk4()), title='4-th order Runge-Kutta')
 
         plt.suptitle('Отличия решений методом сеток от аналитического', fontsize=16)
         plt.show()
