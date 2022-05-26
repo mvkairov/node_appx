@@ -246,12 +246,12 @@ def norm_group_plot(test_batch):
 
 
 def height_group_plot(test_batch):
-    fdm_group_plot(test_batch, 'diff_norms', title='Наибольшее различие решения с аналитическим')
+    fdm_group_plot(test_batch, 'diff_heights', title='Наибольшее различие решения с аналитическим')
 
 
 def plot_time_bench(test_batch):
-    fdm_group_plot(test_batch, 'diff_norms', title='Сравнение времени работы алгоритмов')
+    fdm_group_plot(test_batch, 'get_time_bench', title='Сравнение времени работы алгоритмов')
 
 
 def plot_memory_bench(test_batch):
-    fdm_group_plot(test_batch, 'diff_norms', title='Сравнение аллоцируемой памяти компьютера')
+    fdm_group_plot(test_batch, 'get_memory_bench', title='Сравнение аллоцируемой памяти компьютера')
